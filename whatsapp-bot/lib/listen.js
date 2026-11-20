@@ -3,8 +3,8 @@
 // ends is followed by a new one, and the text is joined; listening finishes
 // only after PAUSE_MS without new words, on stop(), or after MAX_MS.
 //
-// Shared by Hermes Bot, Claude Bot and WhatsApp Bot (same file in each lib/;
-// keep in sync).
+// Based on the helper shared by Hermes Bot and Claude Bot.
+// WhatsApp Bot also accepts a recognition language for voice replies.
 // If the host refuses a restart, whatever was heard is used.
 
 export const PAUSE_MS = 3000;
@@ -83,6 +83,7 @@ export function listen(handlers, options = {}) {
   function startSegment() {
     if (finished) return;
     const r = new SpeechRecognition();
+    if (options.lang) r.lang = options.lang;
     // Host defaults otherwise (continuous off): a segment ends at a pause and
     // the restart in onend joins the next one.
     r.interimResults = true;
